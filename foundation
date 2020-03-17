@@ -1,0 +1,202 @@
+
+import bz2
+import json
+import re
+
+# creating a list for strong negative words that have gravity behind their meaning 
+strongNegWord = dict(hate=1,
+               stress=2,
+               angry=3,
+               scare = 4,
+               depress=5,
+               lone=6,
+               cry=7,
+               dead=8,
+               joyless=9,
+               meaningless=10,
+               cruel=11,
+               sad=12,
+               hurt=13
+               )
+# creating a list for negative words that are used everday and have some gravity behind them 
+medNegWord = dict(idiot=100,
+                  enraged=101,
+                  harmful=102,
+                  mean=103,
+                  nasty=104,
+                  bad=105,
+                  awful=106,
+                  bleak=107,
+                  offensive=108,
+                  )
+# creating a list for negative words that that have a slight signifacnes
+weakNegWord = dict(myself=200,
+                   dreadful=201,
+                   negative=203,
+                   gloomy=204,
+                   fear=205,
+                   never=206,
+                   hostile=207,
+                   feeble=208,
+                   greed=209,
+                   )
+# creating a list  for positive words
+strongPosWord = dict(happy=301,
+                     love=302,
+                     smile=303,
+                     beautiful=304,
+                     hope=305,
+                     free=306,
+                     amazing=307,
+                     greatful=308,
+                     respect=309,
+                     )
+medPosWord = dict(relieved=400,
+                  good=401,
+                  positive=402,
+                  firend=403,
+                  sunny=404,
+                  brilliant=505,
+                  mate=506,
+                  awsome=507,
+                  success=508,
+                  kind=509,
+                  trust=510,
+                  unreal=511,
+                  )
+weakPosWord = dict(like=500,
+                   effortless=501,
+                   calm=502,
+                   win=503,
+                   open=504,
+                   understanding=505,
+                   delight=506,
+                   warm=507,
+                   great=508,
+                   outstanding=509,
+                   )
+#Set intail score to zero
+score = 0
+
+#Both functions will print the increased score along with the word mathced and the statment
+def printscore():
+    print("\n", round(score, 1))
+    print(match)
+
+   # commentOn = input("Turn comments on? If no, press return. ")
+
+   # if commentOn:
+        #print("")
+        #print(userinput)
+
+#This function works for the reddit data and searches for words in the string of text that
+#Matches those in each dictionary and then adds to the current score
+def Score_system():
+
+    global score
+    global match
+
+    for word in strongNegWord:
+        match = re.search(word, userinput, re.IGNORECASE)
+        if match:
+            score -= 0.7
+            printscore()
+
+    for word in medNegWord:
+        match = re.search(word, userinput, re.IGNORECASE)
+        if match:
+            score -= 0.4
+            printscore()
+
+    for word in weakNegWord:
+        match = re.search(word, userinput, re.IGNORECASE)
+        if match:
+            score -= 0.2
+            printscore()
+
+    for word in strongPosWord:
+        match = re.search(word, userinput, re.IGNORECASE)
+        if match:
+            score += 0.7
+            printscore()
+
+    for word in medPosWord:
+        match = re.search(word, userinput, re.IGNORECASE)
+        if match:
+            score += 0.4
+            printscore()
+
+    for word in weakPosWord:
+        match = re.search(word, userinput, re.IGNORECASE)
+        if match:
+            score += 0.2
+            printscore()
+
+#Creating a function that prints the final score
+def finalScore():
+    print("\nYour score is now", round(score, 1))
+
+def menu():
+    #A menu for for the user that lets them decide if they want to run the redit data or 
+    #To have their own input
+    print("---------------------------------------------------------------------------")
+    print("\nWould you like to run the reddit or would you like to have your own input")
+    print("\nfor reddit data press 1")
+    print("\nfor your own input press 2")
+    print("\nPress enter twice to end the session")
+    #X is the input to defince weather the code runs the redit data or oen input
+    #Where 1 is the redit data and 2 is the user input
+    x = input()
+    #print(x)
+
+    global userinput
+
+    if x == "1":
+        print("\nYou have selcted the reddit data")
+        # Specifies location of data set
+        #filename = "D:/Downloads/RC_2015-01.bz2"
+        filename = "C:/Users/User/Downloads/RC_2015-01.bz2"
+        # Opens bz2 data set with read access in text mode
+        with bz2.open(filename, "rt") as bzinput:
+            # Creates empty list
+            lines = []
+        
+            # sets the initial score to 0
+            # score = 0
+        
+            # Opens text file for updating (read/write)
+            f = open("output.txt", "w+", encoding="utf-8")
+        
+            # Loads first 1000 entries
+            for i, line in enumerate(bzinput):
+                if i == 10:
+                    break
+                # Loads individual json entry
+                p = json.loads(line)
+                userinput = p['body']
+                Score_system()
+                # Closes and saves text file
+                f.close()
+
+        finalScore()
+        menu()
+
+    elif x=="2":
+        print("\nYou have wanted to enter your own statment")
+        userinput = input("\nPlease give your statment: ")
+        score = 0
+
+        Score_system()
+        finalScore()
+        menu()
+
+    elif x=="":
+        print("\nSession has ended")
+        finalScore()
+
+    else:
+        print("\nThat was not a a correct input. Please enter 1 for reddit data or 2 for user input.")
+        x
+        menu()
+
+menu()
