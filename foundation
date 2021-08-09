@@ -82,7 +82,7 @@ score = 0
 def printscore():
     print("\n", round(score, 1))
     print(match)
-
+    
    # commentOn = input("Turn comments on? If no, press return. ")
 
    # if commentOn:
@@ -91,6 +91,7 @@ def printscore():
 
 #This function works for the reddit data and searches for words in the string of text that
 #Matches those in each dictionary and then adds to the current score
+
 def Score_system():
 
     global score
@@ -144,7 +145,7 @@ def menu():
     print("\nfor reddit data press 1")
     print("\nfor your own input press 2")
     print("\nPress enter twice to end the session")
-    #X is the input to defince weather the code runs the redit data or oen input
+    #X is the input to define weather the code runs the redit data or oen input
     #Where 1 is the redit data and 2 is the user input
     x = input()
     #print(x)
@@ -167,7 +168,7 @@ def menu():
             # Opens text file for updating (read/write)
             f = open("output.txt", "w+", encoding="utf-8")
         
-            # Loads first 1000 entries
+            # Loads a list of entries depending on i. 
             for i, line in enumerate(bzinput):
                 if i == 10:
                     break
@@ -195,7 +196,7 @@ def menu():
         finalScore()
 
     else:
-        print("\nThat was not a a correct input. Please enter 1 for reddit data or 2 for user input.")
+        print("\nThat was not a a correct input. Please enter 1 for reddit data or 2 for user input, or press return to end session.")
         x
         menu()
 
