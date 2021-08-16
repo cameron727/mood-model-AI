@@ -2,6 +2,7 @@
 import bz2
 import json
 import re
+import pickle
 
 # creating a list for strong negative words that have gravity behind their meaning 
 strongNegWord = dict(hate=1,
